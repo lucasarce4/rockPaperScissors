@@ -1,0 +1,1 @@
+Basic rock paper scissors using only js, will implement graphic interface in the future
