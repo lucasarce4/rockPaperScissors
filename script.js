@@ -2,7 +2,6 @@ function computerPlay(){
     let random = Math.floor(Math.random()*3);
     const playStr = ['Rock','Paper','Scissors'];
     let computerPlayStr = playStr[random];
-    console.log(computerPlayStr);
     return computerPlayStr
 }
  
@@ -11,58 +10,108 @@ function computerPlay(){
 
 function playRound(playerPlay,computerPlay){
     if(playerPlay == 'rock' && computerPlay=='Rock'){
-        return("Computer chose Rock, it's a tie");
+        return("It's a tie");
     }else if(playerPlay === 'rock' && computerPlay==='Paper'){
-        return("Computer chose Paper, you lose!");
+        return("You lose!");
     }else if(playerPlay === 'rock' && computerPlay==='Scissors'){
-        return("Computer chose Scissors, you win!");
+        return("You win!");
     }else if(playerPlay === 'paper' && computerPlay==='Paper'){
-        return("Computer chose Paper, it's a tie");
+        return("It's a tie");
     }else if(playerPlay === 'paper' && computerPlay==='Rock'){
-        return("Computer chose Rock, you win!");
+        return("You win!");
     }else if(playerPlay === 'paper' && computerPlay==='Scissors'){
-        return("Computer chose Scissors, you lose!");
+        return("You lose!");
     }else if(playerPlay === 'scissors' && computerPlay==='Paper'){
-        return("Computer chose Paper, you win!");
+        return("You win!");
     }else if(playerPlay === 'scissors' && computerPlay==='Rock'){
-        return("Computer chose Rock, you lose!");
+        return("You lose!");
     }else if(playerPlay === 'scissors' && computerPlay==='Scissors'){
-        return("Computer chose Scissors, it's a tie");
+        return("It's a tie");
     }
 }
 
 
-
-function game(){
+function buttonPressed () {
+    
     let playerPoint=0;
     let computerPoint=0;
-    for(let i=0; i<5;i++){
-        let playerChoice =  prompt("1-Rock  2-Paper  3-Scissors").toLowerCase();
-        if((playerChoice != 'rock') && (playerChoice != 'paper') && (playerChoice != 'scissors')){
-            alert("Not an option");
-        }
-        let computerChoice = computerPlay();
-        let result = playRound(playerChoice,computerChoice);
-        console.log(result);
+    const buttonChoice = document.querySelectorAll('.playerChoice');
+    buttonChoice.forEach((button) =>{
+        button.addEventListener('click', ()=>{
+            let playerChoice  = button.textContent.toLowerCase();
+            let computerChoice = computerPlay();
+            const div = document.querySelector('#result');
+            const playerText = document.createElement('p');
+            playerText.classList.add('playerText');
+            const computerText = document.createElement('p');
+            computerText.classList.add('computerText');
+            playerText.textContent = 'You chose ' + playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1);
+            div.insertBefore(playerText,div.firstChild);
+            computerText.textContent = 'Computer chose ' + computerChoice;
+            div.insertBefore(computerText,div.childNodes[1]);
+            
+            let result = playRound(playerChoice,computerChoice);
+            if(result.includes('win')){
+                ++playerPoint;
+            }else if(result.includes('lose')){
+                ++computerPoint;
+            }
+
+            game(playerPoint,computerPoint,result);
+            score(playerPoint,computerPoint);
+            if(playerPoint ==5 || computerPoint == 5){
+                playerPoint=0;
+                computerPoint=0;
+            }
+            
+                    })
+        })
+}
+
+
+
+
+buttonPressed();
+
+
+function game(playerPoint,computerPoint,result){
+        const divResult = document.querySelector('#result');
+        const resultText = document.createElement('p');
+        resultText.textContent = result;
+        resultText.classList.add('result');
+        divResult.insertBefore(resultText,divResult.childNodes[2]);
     
-        if(result.includes('win')){
-            ++playerPoint;
-        }else if(result.includes('lose')){
-            ++computerPoint;
-        }
-        console.log("player points " +playerPoint);
-        console.log("computer points "+computerPoint)
-    }
-    score(playerPoint,computerPoint);
+        const div= document.querySelector('#score');
+        const playerScoreText = document.createElement('p');
+        playerScoreText.textContent = 'Player: ' +playerPoint
+        div.replaceChild(playerScoreText,div.firstChild);
+        const computerScoreText = document.createElement('p');
+        div.appendChild(computerScoreText);
+        computerScoreText.textContent = 'Computer: ' +computerPoint;
+        div.replaceChild(computerScoreText,div.childNodes[1]);
+
+
 }
  
 function score(player,computer){
-    if(player > computer){
-        console.log("Congratulations, you win");
-    }else if(player <computer){
-        console.log("Computer win");
-    }else{console.log("Its a tie")}
+    const div = document.querySelector('#result');
+    const finalResult = document.createElement('p');
+    if(player === 5){
+        finalResult.textContent = 'Congratulations, you win';
+        finalResult.classList.add('resultMsg');
+     
+    }else if(computer === 5){
+        finalResult.textContent="Game over, Computer wins, try again!";
+        finalResult.classList.add('resultMsg');
+
+    }
+    div.insertBefore(finalResult,div.firstChild);
+
 }
     
-
-game();
+function clear(div){
+    while(div.firstChild){
+        div.firstChild.remove();
+        console.log(div)
+    }
+}
