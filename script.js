@@ -41,15 +41,14 @@ function buttonPressed () {
             let playerChoice  = button.textContent.toLowerCase();
             let computerChoice = computerPlay();
             const div = document.querySelector('#result');
-            const playerText = document.createElement('p');
-            playerText.classList.add('playerText');
-            const computerText = document.createElement('p');
-            computerText.classList.add('computerText');
-            playerText.textContent = 'You chose ' + playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1);
-            div.insertBefore(playerText,div.firstChild);
-            computerText.textContent = 'Computer chose ' + computerChoice;
-            div.insertBefore(computerText,div.childNodes[1]);
-            
+            const playerImg = document.createElement('img');
+            playerImg.src=convertImg(playerChoice);
+            playerImg.classList.add('playerImg')
+            const computerImg = document.createElement('img');
+            computerImg.src=convertImg(computerChoice.toLowerCase());
+            computerImg.classList.add('computerImg');
+            div.insertBefore(playerImg,div.firstChild);
+            div.insertBefore(computerImg,div.childNodes[1]);
             let result = playRound(playerChoice,computerChoice);
             if(result.includes('win')){
                 ++playerPoint;
@@ -78,7 +77,7 @@ function game(playerPoint,computerPoint,result){
         const divResult = document.querySelector('#result');
         const resultText = document.createElement('p');
         resultText.textContent = result;
-        resultText.classList.add('result');
+        resultText.classList.add('resultText');
         divResult.insertBefore(resultText,divResult.childNodes[2]);
     
         const div= document.querySelector('#score');
@@ -103,15 +102,27 @@ function score(player,computer){
     }else if(computer === 5){
         finalResult.textContent="Game over, Computer wins, try again!";
         finalResult.classList.add('resultMsg');
-
     }
     div.insertBefore(finalResult,div.firstChild);
-
 }
+        
+        
+
+
     
 function clear(div){
     while(div.firstChild){
         div.firstChild.remove();
         console.log(div)
+    }
+}
+
+function convertImg (choice){
+    if(choice == 'rock'){ 
+        return 'img/rock.png';
+    }else if (choice == 'paper'){
+        return src='img/paper.png';
+    }else if (choice == 'scissors'){
+        return src = 'img/scissors.png';
     }
 }
